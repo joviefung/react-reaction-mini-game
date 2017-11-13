@@ -6,7 +6,9 @@
     "material-ui": "^0.19.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-scripts-ts": "2.8.0"
+    "react-facebook": "^4.1.1",
+    "react-scripts-ts": "2.8.0",
+    "reactjs-localstorage": "^0.0.5"
   },
   "scripts": {
     "start": "react-scripts-ts start",

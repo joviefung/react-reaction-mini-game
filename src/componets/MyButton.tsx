@@ -1,8 +1,8 @@
 import * as React from 'react';
-import RaisedButton from '../../node_modules/material-ui/RaisedButton';
-import MuiThemeProvider from '../../node_modules/material-ui/styles/MuiThemeProvider';
-import lightBaseTheme from '../../node_modules/material-ui/styles/baseThemes/lightBaseTheme';
-import getMuiTheme from '../../node_modules/material-ui/styles/getMuiTheme';
+import RaisedButton from 'material-ui/RaisedButton';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 class MyButton extends React.Component<MyButtonProps, MyButtonState> {
   style = {
@@ -10,14 +10,16 @@ class MyButton extends React.Component<MyButtonProps, MyButtonState> {
     fontWeight: 600,
     height: 48
   };
+  timeout: any;
 
   constructor(props: MyButtonProps) {
     super();
     this.state = {
       canClick: false,
+      clicked: false,
       waitTime: props.waitTime
     };
-    setTimeout(() => this.clickNow(), this.state.waitTime);
+    this.timeout = setTimeout(() => this.clickNow(), this.state.waitTime);
   }
 
   clickNow() {
@@ -30,26 +32,46 @@ class MyButton extends React.Component<MyButtonProps, MyButtonState> {
   stop = () => {
     let stopTime = new Date();
     this.setState({
+      clicked: true,
       endTime: stopTime
     });
     let reactionTime: number = (stopTime.getTime() - this.state.startTime!.getTime());
     
-    alert('Your Reaction Time is ' + reactionTime + ' ms');
-    location.reload();    
+    this.props.onSuccess(reactionTime);
   }
 
   failed = () => {
-    alert('You Failed....');
-    location.reload();
+    this.setState({
+      clicked: true
+    });
+    clearTimeout(this.timeout);
+
+    this.props.onFailure();
   }
 
   render() {
-    let button = null;
+    let button = <div />;
     
     if (this.state.canClick) {
-      button = <RaisedButton label="CLICK!" primary={true} style={this.style} onClick={this.stop} />;
+      button = (
+        <RaisedButton 
+          label="CLICK!" 
+          primary={true} 
+          style={this.style} 
+          onClick={this.stop} 
+          disabled={this.state.clicked} 
+        />
+      );
     } else {
-      button = <RaisedButton label="WAIT..." secondary={true} style={this.style} onClick={this.failed} />;
+      button = (
+        <RaisedButton 
+          label="WAIT..." 
+          secondary={true} 
+          style={this.style} 
+          onClick={this.failed}
+          disabled={this.state.clicked} 
+        />
+      );
     }
 
     return (
