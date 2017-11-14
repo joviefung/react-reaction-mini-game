@@ -48,7 +48,9 @@ class App extends React.Component<{}, AppState> {
     this.setState({ showResult: true });
     let newRecord = this.state.bestRecord;
     if (reactTime < this.state.bestRecord || this.state.bestRecord === -1) {
-      localStorage.setItem('best-record', reactTime.toString());
+      if (localStorage) {
+        localStorage.setItem('best-record', reactTime.toString());
+      }
       this.setState({ bestRecord: reactTime });
       newRecord = reactTime;
     }
