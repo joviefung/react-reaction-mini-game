@@ -23,16 +23,20 @@ const FacebookShareButton = (
 class App extends React.Component<{}, AppState> {
   result: string = 'Your Reaction Time is ${time} ms.';
   bestRecord: string = 'Your Best Record is ${time} ms.';
+  record: number = -1;
 
   constructor(props: {}) {
     super(props);
-    const record: number = parseInt(localStorage.getItem('best-record')!, 10) ? 
-                             parseInt(localStorage.getItem('best-record')!, 10) : -1;
+    if (localStorage) {
+      this.record = parseInt(localStorage.getItem('best-record')!, 10) ? 
+      parseInt(localStorage.getItem('best-record')!, 10) : -1;
+    }
+    
     this.state = { 
       isStarted: false,
       showResult: false,
       waitTime: this.randomTime(),
-      bestRecord: record
+      bestRecord: this.record
     };
   }
 
@@ -48,7 +52,9 @@ class App extends React.Component<{}, AppState> {
     this.setState({ showResult: true });
     let newRecord = this.state.bestRecord;
     if (reactTime < this.state.bestRecord || this.state.bestRecord === -1) {
-      localStorage!.setItem('best-record', reactTime.toString());
+      if (localStorage) {
+        localStorage.setItem('best-record', reactTime.toString());
+      }
       this.setState({ bestRecord: reactTime });
       newRecord = reactTime;
     }
