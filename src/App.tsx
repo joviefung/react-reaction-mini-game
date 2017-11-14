@@ -27,7 +27,7 @@ class App extends React.Component<{}, AppState> {
 
   constructor(props: {}) {
     super(props);
-    if (localStorage) {
+    if (typeof localStorage !== 'undefined') {
       this.record = parseInt(localStorage.getItem('best-record')!, 10) ? 
       parseInt(localStorage.getItem('best-record')!, 10) : -1;
     }
@@ -52,7 +52,7 @@ class App extends React.Component<{}, AppState> {
     this.setState({ showResult: true });
     let newRecord = this.state.bestRecord;
     if (reactTime < this.state.bestRecord || this.state.bestRecord === -1) {
-      if (localStorage) {
+      if (typeof localStorage !== 'undefined') {
         localStorage.setItem('best-record', reactTime.toString());
       }
       this.setState({ bestRecord: reactTime });
